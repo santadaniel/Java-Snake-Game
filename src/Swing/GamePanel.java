@@ -12,19 +12,113 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.SortedMap;
 
+/**
+ * The GamePanel class represents the panel where the Snake game is displayed.
+ * It extends from JPanel and implements ActionListener.
+ */
 public class GamePanel extends JPanel implements ActionListener
 {
+    /**
+     * The food object in the game.
+     */
     private Food food;
+
+    /**
+     * The list of snakes in the game.
+     */
     private ArrayList<Snake> snakes;
+
+    /**
+     * The current state of the game.
+     */
     private State currentState;
+
+    /**
+     * The size of each cell of the game's grid.
+     */
     private static int cellSize = 49;
+
+    /**
+     * The timer used to update the game state at regular intervals.
+     */
     private Timer timer;
+
+    /**
+     * Flag indicating whether the game has ended.
+     */
     private boolean isEnd = false;
+
+    /**
+     * The font used for displaying texts.
+     */
     private Font font;
+
+    /**
+     * The SnakeFrame associated with the panel.
+     */
     private SnakeFrame frame;
+
+    /**
+     * The delay between timer events, controlling the speed of the game.
+     */
     private static int delay = 150;
+
+    /**
+     * The text field used for player name input.
+     */
     private JTextField textField;
 
+    /**
+     * Constructs a GamePanel with the specified SnakeFrame.
+     *
+     * @param sf The SnakeFrame associated with the panel.
+     */
+    public GamePanel (SnakeFrame sf)
+    {
+        frame = sf;
+        frame.setFocusable(true);
+        snakes = new ArrayList<>();
+        currentState = sf.getCurrentState();
+        font = new Font("score", Font.BOLD, 20);
+        setFocusable(true);
+        setBackground(Color.WHITE);
+        if (currentState.equals(State.OnePlayer))
+        {
+            snakes.addAll(Snake.createOneSnake());
+        }
+        if (currentState.equals(State.TwoPlayers))
+        {
+            snakes.addAll(Snake.createTwoSnakes());
+        }
+        food = Food.spawnFood(snakes);
+        timer = new Timer(delay, this);
+        timer.start();
+        sf.addKeyListener(new KeyListener() {
+
+            @Override
+            public void keyTyped(KeyEvent e) {}
+
+            @Override
+            public void keyPressed(KeyEvent e)
+            {
+                ArrayList<ArrayList<Integer>> keys = createKeys();
+                for (int i = 0; i < snakes.size(); i++)
+                {
+                    snakes.get(i).changeDir(e, keys.get(i));
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {}
+        });
+    }
+
+    /**
+     * Overrides the actionPerformed method.
+     * Handles timer events and updates the game's state.
+     *
+     * @param e The ActionEvent associated with the timer event.
+     */
     @Override
     public void actionPerformed(ActionEvent e)
     {
@@ -34,12 +128,13 @@ public class GamePanel extends JPanel implements ActionListener
             snake.move();
             if (food.isEaten(snake.getPart(0)))
             {
+                // Speeds up the Game if the Food is eaten.
                 timer.setDelay(delay / 3);
                 for (int i = 0; i < food.getPower(); i++)
                 {
                     snake.grow();
                 }
-                food = Food.createFood(snakes);
+                food = Food.spawnFood(snakes);
             }
         }
         checkCollision();
@@ -52,14 +147,20 @@ public class GamePanel extends JPanel implements ActionListener
         }
     }
 
+    /**
+     * Checks for collisions in the game.
+     */
     public void checkCollision()
     {
         checkSelf();
         checkWall();
-        if (snakes.size() > 1)
+        if (frame.getCurrentState().equals(State.TwoPlayers))
             checkOther();
     }
 
+    /**
+     * Checks for collision with the other snake.
+     */
     public void checkOther()
     {
         for (int i = 0; i < snakes.size(); i++)
@@ -74,6 +175,9 @@ public class GamePanel extends JPanel implements ActionListener
         }
     }
 
+    /**
+     * Checks for collision with the grid's walls.
+     */
     public void checkWall()
     {
         for (Snake snake : snakes)
@@ -86,6 +190,9 @@ public class GamePanel extends JPanel implements ActionListener
         }
     }
 
+    /**
+     * Checks for collision with itself.
+     */
     public void checkSelf()
     {
         for (Snake snake : snakes)
@@ -98,6 +205,11 @@ public class GamePanel extends JPanel implements ActionListener
         }
     }
 
+    /**
+     * Checks if all snakes are alive.
+     *
+     * @return True if all snakes are alive, false otherwise.
+     */
     public boolean allAlive()
     {
         boolean ret = true;
@@ -109,6 +221,11 @@ public class GamePanel extends JPanel implements ActionListener
         return ret;
     }
 
+    /**
+     * Checks if the player's score is on the leaderboard.
+     *
+     * @return True if the score is on the leaderboard, false otherwise.
+     */
     public boolean isOnBoard()
     {
         SortedMap<Double, String> players = frame.lb.getPlayers();
@@ -132,6 +249,14 @@ public class GamePanel extends JPanel implements ActionListener
         return false;
     }
 
+    /**
+     * Adds a button with the specified name, command, and position to the panel.
+     *
+     * @param name     The name of the button.
+     * @param command  The ActionCommand associated with the button.
+     * @param x        The x-coordinate of the button.
+     * @param y        The y-coordinate of the button.
+     */
     public void addButton(String name, String command, int x, int y)
     {
         ActionListener ml = new MyActionListener(frame, textField);
@@ -146,9 +271,16 @@ public class GamePanel extends JPanel implements ActionListener
         add(button);
     }
 
+    /**
+     * Creates a JTextField for player name input.
+     *
+     * @param score The score associated with the player.
+     * @return The created JTextField.
+     */
     public JTextField createTextField(Double score)
     {
         JTextField textField = new JTextField("Please enter your name");
+        // Setting the JTextField's name to the score to store it.
         textField.setName(score.toString());
         textField.setFocusable(true);
         textField.setBackground(Color.LIGHT_GRAY);
@@ -158,6 +290,12 @@ public class GamePanel extends JPanel implements ActionListener
         return textField;
     }
 
+    /**
+     * Overrides the paintComponent method.
+     * Draws the game components on the panel.
+     *
+     * @param g The Graphics object.
+     */
     @Override
     protected void paintComponent(Graphics g)
     {
@@ -168,7 +306,7 @@ public class GamePanel extends JPanel implements ActionListener
             drawSnake(g, snake);
         }
         drawObject(g, food);
-        if (snakes.size() == 1)
+        if (frame.getCurrentState().equals(State.OnePlayer))
         {
             g.setFont(font);
             g.setColor(Color.ORANGE);
@@ -178,6 +316,11 @@ public class GamePanel extends JPanel implements ActionListener
             drawEnd(g);
     }
 
+    /**
+     * Draws a black screen and draws the ending based on the number of players.
+     *
+     * @param g The Graphics object.
+     */
     public void drawEnd(Graphics g)
     {
         timer.stop();
@@ -185,7 +328,7 @@ public class GamePanel extends JPanel implements ActionListener
         g.setFont(font);
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, getWidth(), getHeight());
-        if (snakes.size() == 1)
+        if (frame.getCurrentState().equals(State.OnePlayer))
         {
             drawScenOne(g);
             addButton("Back to Menu", "backToMenu", 275, 415);
@@ -204,6 +347,11 @@ public class GamePanel extends JPanel implements ActionListener
         }
     }
 
+    /**
+     * Draws the end game screen for a single-player scenario.
+     *
+     * @param g The Graphics object.
+     */
     public void drawScenOne(Graphics g)
     {
         String gameOver = "GAME OVER";
@@ -212,6 +360,11 @@ public class GamePanel extends JPanel implements ActionListener
         drawStringToScreen(g, score, 0, 40);
     }
 
+    /**
+     * Draws the end game screen for a two-player scenario.
+     *
+     * @param g The Graphics object.
+     */
     public void drawScenTwo(Graphics g)
     {
         Snake snake1 = snakes.get(0);
@@ -224,7 +377,14 @@ public class GamePanel extends JPanel implements ActionListener
             drawStringToScreen(g, "Red wins", 0, 0);
     }
 
-    //Calculating the center of the screen and creating messages.
+    /**
+     * Draws the specified string on the screen using the provided Graphics object.
+     *
+     * @param g         The Graphics object used for drawing.
+     * @param s         The string to be drawn.
+     * @param xRelPoz   x-position relative to the middle of the screen.
+     * @param yRelPoz   y-position relative to the middle of the screen.
+     */
     public void drawStringToScreen(Graphics g, String s, int xRelPoz, int yRelPoz)
     {
         FontMetrics fontMetrics = g.getFontMetrics();
@@ -234,6 +394,11 @@ public class GamePanel extends JPanel implements ActionListener
         g.drawString(s, x, y);
     }
 
+    /**
+     * Draws the game's grid on the panel.
+     *
+     * @param g The Graphics object.
+     */
     private void drawMap(Graphics g)
     {
         g.setColor(Color.BLACK);
@@ -246,6 +411,12 @@ public class GamePanel extends JPanel implements ActionListener
         }
     }
 
+    /**
+     * Draws a snakes on the panel.
+     *
+     * @param g      The Graphics object.
+     * @param snake  The snake to be drawn.
+     */
     private void drawSnake(Graphics g, Snake snake)
     {
         for (int i = 0; i < snake.getSize(); i++)
@@ -254,6 +425,12 @@ public class GamePanel extends JPanel implements ActionListener
         }
     }
 
+    /**
+     * Draws a GameObject on the panel.
+     *
+     * @param g  The Graphics object.
+     * @param o  The GameObject to be drawn.
+     */
     private void drawObject(Graphics g, GameObject o)
     {
         g.setColor(o.getColor());
@@ -266,46 +443,11 @@ public class GamePanel extends JPanel implements ActionListener
                 o.getDiameter());
     }
 
-    public GamePanel (SnakeFrame sf)
-    {
-        frame = sf;
-        frame.setFocusable(true);
-        snakes = new ArrayList<>();
-        currentState = sf.getCurrentState();
-        font = new Font("score", Font.BOLD, 20);
-        setFocusable(true);
-        setBackground(Color.WHITE);
-        if (currentState.equals(State.OnePlayer))
-        {
-            snakes.addAll(Snake.createOneSnake());
-        }
-        if (currentState.equals(State.TwoPlayers))
-        {
-            snakes.addAll(Snake.createTwoSnakes());
-        }
-        food = Food.createFood(snakes);
-        timer = new Timer(delay, this);
-        timer.start();
-        sf.addKeyListener(new KeyListener() {
-
-            @Override
-            public void keyTyped(KeyEvent e) {}
-
-            @Override
-            public void keyPressed(KeyEvent e)
-            {
-                ArrayList<ArrayList<Integer>> keys = createKeys();
-                for (int i = 0; i < snakes.size(); i++)
-                {
-                    snakes.get(i).changeDir(e, keys.get(i));
-                }
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {}
-        });
-    }
-
+    /**
+     * Creates a set of key codes for each player.
+     *
+     * @return The ArrayList of key codes for each player.
+     */
     public ArrayList<ArrayList<Integer>> createKeys()
     {
         ArrayList<ArrayList<Integer>> keys = new ArrayList<>();

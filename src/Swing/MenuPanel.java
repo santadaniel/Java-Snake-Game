@@ -5,8 +5,18 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+/**
+ * The MenuPanel class represents the main menu panel in the Snake game.
+ * It extends from JPanel.
+ * It contains buttons for starting the game, viewing the leaderboard, and exiting the application.
+ */
 public class MenuPanel extends JPanel
 {
+    /**
+     * Constructs a new MenuPanel with buttons for One Player, Two Players, Leader Board, and Exit.
+     *
+     * @param sf The SnakeFrame associated with this panel.
+     */
     public MenuPanel(SnakeFrame sf)
     {
         ArrayList<JButton> buttons = new ArrayList<>();
