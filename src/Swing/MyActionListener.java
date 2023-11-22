@@ -56,7 +56,7 @@ public class MyActionListener implements ActionListener
                 String name = textFieldf.getText();
                 if (!name.contains("###") && !name.equals("Please enter your name"))
                 {
-                    frame.lb.addNewPlayer(textFieldf.getText(), Double.parseDouble(textFieldf.getName()));
+                    frame.lb.addNewPlayer(textFieldf.getText(), Integer.parseInt(textFieldf.getName()));
                     textFieldf.setFocusable(false);
                 }
                 break;

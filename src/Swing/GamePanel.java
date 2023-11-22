@@ -2,14 +2,13 @@ package Swing;
 
 import Game.Food;
 import Game.GameObject;
+import Game.Player;
 import Game.Snake;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
-import java.util.Random;
-import java.util.SortedMap;
 
 /**
  * The GamePanel class represents the panel where the Snake game is displayed.
@@ -232,16 +231,16 @@ public class GamePanel extends JPanel implements ActionListener
      */
     public boolean isOnBoard()
     {
-        SortedMap<Double, String> players = frame.lb.getPlayers();
+        ArrayList<Player> players = frame.lb.getPlayers();
         int i = 0;
-        if (players.keySet().isEmpty())
+        if (players.isEmpty())
         {
             return true;
         }
-        for (Double score : players.keySet())
+        for (Player player : players)
         {
             i++;
-            if (snakes.get(0).getSize() - 3 > score)
+            if (snakes.get(0).getSize() - 3 > player.getScore())
             {
                 return true;
             }
@@ -281,7 +280,7 @@ public class GamePanel extends JPanel implements ActionListener
      * @param score The score associated with the player.
      * @return The created JTextField.
      */
-    public JTextField createTextField(Double score)
+    public JTextField createTextField(Integer score)
     {
         JTextField textField = new JTextField("Please enter your name");
         // Setting the JTextField's name to the score to store it.
@@ -338,8 +337,7 @@ public class GamePanel extends JPanel implements ActionListener
             addButton("Back to Menu", "backToMenu", 275, 415);
             if (isOnBoard())
             {
-                Random random = new Random();
-                textField = createTextField(snakes.get(0).getSize() - 3 + random.nextDouble());
+                textField = createTextField(snakes.get(0).getSize() - 3);
                 add(textField);
                 addButton("Submit", "Submit", 500, 200);
             }
@@ -475,9 +473,8 @@ public class GamePanel extends JPanel implements ActionListener
     }
 
     /**
-     * Sets the list of snakes in the game.
-     *
-     * @param s An ArrayList containing the Snake objects to be set as the current snakes in the game.
+     * Sets the List
+     * @param s The list of Snakes.
      */
     public void setSnakes(ArrayList<Snake> s)
     {

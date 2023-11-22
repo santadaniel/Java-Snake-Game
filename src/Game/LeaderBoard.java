@@ -1,9 +1,7 @@
 package Game;
 
 import java.io.*;
-import java.util.Collections;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * The LeaderBoard class manages the leaderboard for the Snake game, including reading, writing, and updating player scores.
@@ -12,9 +10,8 @@ public class LeaderBoard
 {
     /**
      * A sorted map containing player scores and names, ordered by descending scores.
-     * Scores stored as doubles so that 2 same scores can get on the leader board.
      */
-    private SortedMap<Double, String> players;
+    private ArrayList<Player> players;
 
     /**
      * Constructs a LeaderBoard by reading player scores and names from a file.
@@ -24,7 +21,7 @@ public class LeaderBoard
      */
     public LeaderBoard() throws IOException
     {
-        players = new TreeMap<>(Collections.reverseOrder());
+        players = new ArrayList<>();
         FileReader fr = new FileReader("res/LeaderBoard.txt");
         BufferedReader br = new BufferedReader(fr);
         while (true)
@@ -35,8 +32,13 @@ public class LeaderBoard
             //every two strings contains a player
             for (int i = 0; i < input.length; i = i + 2)
             {
-                players.put(Double.parseDouble(input[i+1]), input[i]);
+                players.add(new Player(input[i], Integer.parseInt(input[i+1])));
             }
+        }
+        if (players != null)
+        {
+            players.sort(Comparator.comparingInt(Player::getScore));
+            players.sort(Collections.reverseOrder(Comparator.comparingInt(Player::getScore)));
         }
         br.close();
     }
@@ -53,15 +55,15 @@ public class LeaderBoard
         if (players != null)
         {
             int i = 0;
-            for (Double score : players.keySet())
+            for (Player player : players)
             {
                 if (i == 10)
                 {
                     break;
                 }
-                bw.write(players.get(score));
+                bw.write(player.getName());
                 bw.write("###");
-                bw.write(score.toString());
+                bw.write(player.getScore().toString());
                 bw.write("###");
                 i++;
             }
@@ -74,7 +76,7 @@ public class LeaderBoard
      *
      * @return The sorted map of player scores and names.
      */
-    public SortedMap<Double, String> getPlayers()
+    public ArrayList<Player> getPlayers()
     {
         return players;
     }
@@ -85,9 +87,11 @@ public class LeaderBoard
      * @param name  The name of the player.
      * @param score The score achieved by the player.
      */
-    public void addNewPlayer(String name, double score)
+    public void addNewPlayer(String name, int score)
     {
-        players.put(score, name);
+        players.add(new Player(name, score));
+        players.sort(Comparator.comparingInt(Player::getScore));
+        players.sort(Collections.reverseOrder(Comparator.comparingInt(Player::getScore)));
         try {
             changeLeaderBoard();
         } catch (IOException e) {

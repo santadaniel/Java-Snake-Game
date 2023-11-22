@@ -1,5 +1,7 @@
 package Swing;
 
+import Game.Player;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -15,7 +17,8 @@ public class LeaderBoardPanel extends JPanel
     /**
      * The list of player names and scores to display on the leaderboard.
      */
-    private ArrayList<String> players;
+    private ArrayList<String> strings;
+
     /**
      * Reference to the SnakeFrame associated with this panel.
      */
@@ -29,13 +32,12 @@ public class LeaderBoardPanel extends JPanel
     public LeaderBoardPanel(SnakeFrame sf)
     {
         frame = sf;
-        players = new ArrayList<>();
+        strings = new ArrayList<>();
         int i = 0;
-        for (Double score : frame.lb.getPlayers().keySet())
+        for (Player player : frame.lb.getPlayers())
         {
             i++;
-            String name = frame.lb.getPlayers().get(score);
-            players.add(name + ", Score: " + (int) Math.floor(score));
+            strings.add(player.getName() + ", Score: " + player.getScore());
             if (i == 10)
                 break;
         }
@@ -57,9 +59,9 @@ public class LeaderBoardPanel extends JPanel
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, getWidth(), getHeight());
         g.setFont(new Font("Names", Font.BOLD, 36));
-        for (int i = 0; i < players.size(); i++)
+        for (int i = 0; i < strings.size(); i++)
         {
-            drawStringToScreen(g, i+1 + ". " + players.get(i), 0, (i + 1) * 55);
+            drawStringToScreen(g, i+1 + ". " + strings.get(i), 0, (i + 1) * 55);
         }
     }
 

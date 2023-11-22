@@ -70,7 +70,6 @@ public class CollosionTest
     {
         snakes.remove(s3);
         s2.move();
-        System.out.println(s2.getPart(0).getPoint());
         gp.checkOther();
         Assert.assertFalse(s2.isAlive());
     }
