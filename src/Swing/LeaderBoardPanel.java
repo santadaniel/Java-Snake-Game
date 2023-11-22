@@ -15,11 +15,11 @@ public class LeaderBoardPanel extends JPanel
     /**
      * The list of player names and scores to display on the leaderboard.
      */
-    ArrayList<String> players;
+    private ArrayList<String> players;
     /**
      * Reference to the SnakeFrame associated with this panel.
      */
-    SnakeFrame frame;
+    private SnakeFrame frame;
 
     /**
      * Constructs a new LeaderBoardPanel.

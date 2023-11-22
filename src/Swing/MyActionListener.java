@@ -1,7 +1,5 @@
 package Swing;
 
-import Game.State;
-
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,11 +13,11 @@ public class MyActionListener implements ActionListener
     /**
      * Reference to the SnakeFrame.
      */
-    SnakeFrame frame;
+    private SnakeFrame frame;
     /**
      * Reference to the JTextField for user input.
      */
-    JTextField textFieldf;
+    private JTextField textFieldf;
 
     /**
      * Constructs a MyActionListener with the specified SnakeFrame and JTextField.

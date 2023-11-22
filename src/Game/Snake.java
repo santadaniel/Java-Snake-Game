@@ -49,6 +49,7 @@ public class Snake
         int diameter = 42;
         for (int i = 0; i < points.size(); i ++)
         {
+            if (diameter > 21)
             diameter = diameter - 2;
             GameObject part = new GameObject(points.get(i), c, diameter);
             // Changing the new part's color slightly.

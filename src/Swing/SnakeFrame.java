@@ -1,7 +1,6 @@
 package Swing;
 
 import Game.LeaderBoard;
-import Game.State;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -44,7 +43,7 @@ public class SnakeFrame extends JFrame
         }
     }
 
-    /**
+      /**
      * Updates the content pane based on the current state.
      * Called internally to switch between different panels.
      */

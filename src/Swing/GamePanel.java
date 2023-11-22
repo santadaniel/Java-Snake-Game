@@ -3,7 +3,6 @@ package Swing;
 import Game.Food;
 import Game.GameObject;
 import Game.Snake;
-import Game.State;
 
 import javax.swing.*;
 import java.awt.*;
@@ -69,6 +68,11 @@ public class GamePanel extends JPanel implements ActionListener
     private JTextField textField;
 
     /**
+     * The set of key codes for each player.
+     */
+    private static ArrayList<ArrayList<Integer>> keys;
+
+    /**
      * Constructs a GamePanel with the specified SnakeFrame.
      *
      * @param sf The SnakeFrame associated with the panel.
@@ -80,15 +84,16 @@ public class GamePanel extends JPanel implements ActionListener
         snakes = new ArrayList<>();
         currentState = sf.getCurrentState();
         font = new Font("score", Font.BOLD, 20);
+        keys = createKeys();
         setFocusable(true);
         setBackground(Color.WHITE);
         if (currentState.equals(State.OnePlayer))
         {
-            snakes.addAll(Snake.createOneSnake());
+            setSnakes(Snake.createOneSnake());
         }
         if (currentState.equals(State.TwoPlayers))
         {
-            snakes.addAll(Snake.createTwoSnakes());
+            setSnakes(Snake.createTwoSnakes());
         }
         food = Food.spawnFood(snakes);
         timer = new Timer(delay, this);
@@ -101,7 +106,6 @@ public class GamePanel extends JPanel implements ActionListener
             @Override
             public void keyPressed(KeyEvent e)
             {
-                ArrayList<ArrayList<Integer>> keys = createKeys();
                 for (int i = 0; i < snakes.size(); i++)
                 {
                     snakes.get(i).changeDir(e, keys.get(i));
@@ -468,5 +472,15 @@ public class GamePanel extends JPanel implements ActionListener
         keys.add(secondSet);
 
         return keys;
+    }
+
+    /**
+     * Sets the list of snakes in the game.
+     *
+     * @param s An ArrayList containing the Snake objects to be set as the current snakes in the game.
+     */
+    public void setSnakes(ArrayList<Snake> s)
+    {
+        snakes = s;
     }
 }

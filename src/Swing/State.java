@@ -1,4 +1,4 @@
-package Game;
+package Swing;
 
 /**
  * The State enum represents different states in the Snake game.
