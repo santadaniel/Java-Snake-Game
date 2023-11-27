@@ -6,5 +6,20 @@ package Game;
  */
 public enum Direction
 {
-    UP,DOWN,RIGHT,LEFT
+    /**
+     * Up direction.
+     */
+    UP,
+    /**
+     * Down direction.
+     */
+    DOWN,
+    /**
+     * Right direction.
+     */
+    RIGHT,
+    /**
+     * Left direction.
+     */
+    LEFT
 }

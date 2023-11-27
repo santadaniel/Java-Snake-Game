@@ -6,5 +6,20 @@ package Swing;
  */
 public enum State
 {
-   Menu, OnePlayer, TwoPlayers, LeaderBoard
+    /**
+     * Menu state.
+     */
+    Menu,
+    /**
+     * One player state.
+     */
+    OnePlayer,
+    /**
+     * Two players state.
+     */
+    TwoPlayers,
+    /**
+     * Leader board state.
+     */
+    LeaderBoard
 }

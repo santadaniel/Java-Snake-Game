@@ -58,6 +58,7 @@ public class MyActionListener implements ActionListener
                 {
                     frame.lb.addNewPlayer(textFieldf.getText(), Integer.parseInt(textFieldf.getName()));
                     textFieldf.setFocusable(false);
+                    frame.setCurrentState(State.Menu);
                 }
                 break;
             case "exit":

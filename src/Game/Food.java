@@ -19,10 +19,10 @@ public class Food extends GameObject
     /**
      * Constructs a new Food object with the specified position, color, diameter, and power.
      *
-     * @param p    The position of the food item as a Point.
-     * @param c    The color of the food item.
-     * @param d    The diameter of the food item.
-     * @param pow  The power associated with the food item.
+     * @param p   The position of the food item as a Point.
+     * @param c   The color of the food item.
+     * @param d   The diameter of the food item.
+     * @param pow The power associated with the food item.
      */
     public Food(Point p, Color c, int d, int pow)
     {

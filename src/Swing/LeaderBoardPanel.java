@@ -68,10 +68,10 @@ public class LeaderBoardPanel extends JPanel
     /**
      * Draws the specified string on the screen using the provided Graphics object.
      *
-     * @param g         The Graphics object used for drawing.
-     * @param s         The string to be drawn.
-     * @param xRelPoz   x-position relative to the middle of the screen.
-     * @param yRelPoz   y-position relative to the middle of the screen.
+     * @param g       The Graphics object used for drawing.
+     * @param s       The string to be drawn.
+     * @param xRelPoz x-position relative to the middle of the screen.
+     * @param yRelPoz y-position relative to the middle of the screen.
      */
     public void drawStringToScreen(Graphics g, String s, int xRelPoz, int yRelPoz)
     {

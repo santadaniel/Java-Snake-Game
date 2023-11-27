@@ -255,10 +255,10 @@ public class GamePanel extends JPanel implements ActionListener
     /**
      * Adds a button with the specified name, command, and position to the panel.
      *
-     * @param name     The name of the button.
-     * @param command  The ActionCommand associated with the button.
-     * @param x        The x-coordinate of the button.
-     * @param y        The y-coordinate of the button.
+     * @param name    The name of the button.
+     * @param command The ActionCommand associated with the button.
+     * @param x       The x-coordinate of the button.
+     * @param y       The y-coordinate of the button.
      */
     public void addButton(String name, String command, int x, int y)
     {
@@ -382,10 +382,10 @@ public class GamePanel extends JPanel implements ActionListener
     /**
      * Draws the specified string on the screen using the provided Graphics object.
      *
-     * @param g         The Graphics object used for drawing.
-     * @param s         The string to be drawn.
-     * @param xRelPoz   x-position relative to the middle of the screen.
-     * @param yRelPoz   y-position relative to the middle of the screen.
+     * @param g       The Graphics object used for drawing.
+     * @param s       The string to be drawn.
+     * @param xRelPoz x-position relative to the middle of the screen.
+     * @param yRelPoz y-position relative to the middle of the screen.
      */
     public void drawStringToScreen(Graphics g, String s, int xRelPoz, int yRelPoz)
     {
@@ -474,6 +474,7 @@ public class GamePanel extends JPanel implements ActionListener
 
     /**
      * Sets the List
+     *
      * @param s The list of Snakes.
      */
     public void setSnakes(ArrayList<Snake> s)
